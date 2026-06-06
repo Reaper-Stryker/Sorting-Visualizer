@@ -6,126 +6,219 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sorting Visualizer</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class = "header">
-        <h1>Sorting Visualizer</h1>
-    </div>
-    <div class = "sorting-algorithms-dropdown">
-        <select name="Sorting Algorithms" id="sorting-algorithm">
-            <option value="bubble">Bubble Sort</option>
-            <option value="selection">Selection Sort</option>
-            <option value="insertion">Insertion Sort</option>
-            <option value="merge">Merge Sort</option>
-            <option value="quick">Quick Sort</option>
-            <option value="heap">Heap Sort</option>
-            <option value="radix">Radix Sort</option>
-            <option value="counting">Counting Sort</option>
-            <option value="shell">Shell Sort</option>
-            <option value="bucket">Bucket Sort</option>
-        </select>
-    </div>
-    <div class = "searching-algorithms-dropdown">
-        <select name="Search Algorithms" id="search-algorithm">
-            <option value="linear">Linear Search</option>
-            <option value="binary">Binary Search</option>
-            <option value="jump">Jump Search</option>
-            <option value="interpolation">Interpolation Search</option>
-            <option value="exponential">Exponential Search</option>
-        </select>
-    </div>
-    <div class = "theory">
+    <nav class="navbar">
+        <div class="header">
+            <h1>Sorting Visualizer</h1>
+        </div>
+        
+        <div class="nav-controls">
+            <div class="sorting-algorithms-dropdown">
+                <select name="Sorting Algorithms" id="sorting-algorithm">
+                    <option value="bubble">Bubble Sort</option>
+                    <option value="selection">Selection Sort</option>
+                    <option value="insertion">Insertion Sort</option>
+                    <option value="merge">Merge Sort</option>
+                    <option value="quick">Quick Sort</option>
+                    <option value="heap">Heap Sort</option>
+                    <option value="radix">Radix Sort</option>
+                    <option value="counting">Counting Sort</option>
+                    <option value="shell">Shell Sort</option>
+                    <option value="bucket">Bucket Sort</option>
+                </select>
+            </div>
+            <div class="searching-algorithms-dropdown">
+                <select name="Search Algorithms" id="search-algorithm">
+                    <option value="linear">Linear Search</option>
+                    <option value="binary">Binary Search</option>
+                    <option value="jump">Jump Search</option>
+                    <option value="interpolation">Interpolation Search</option>
+                    <option value="exponential">Exponential Search</option>
+                </select>
+            </div>
+        </div>
+    </nav>
+
+    <div class="theory">
         <h2>Theory</h2>
     </div>
-    <div class = "theory-content">
-        <p id="theory">
-            lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, voluptate. Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, voluptate. Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, voluptate. Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, voluptate. Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, voluptate. Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas,
-        </p>
+    
+    <div class="bubble-sort">
+        <p>Bubble Sort is one of the simplest sorting algorithms. It repeatedly compares adjacent elements in a list and swaps them if they are in the wrong order. This process continues until the list is sorted.</p>
+        <ul>
+            <li>Start at the beginning of the list.</li>
+            <li>Compare the first element with the second. If the first is greater than the second, swap them.</li>
+            <li>Move to the next pair and repeat the comparison and swapping process.</li>
+            <li>Continue this for all elements in the list. After one pass, the largest element "bubbles up" to its correct position at the end of the list.</li>
+            <li>Repeat the above steps for the remaining unsorted portion of the list until no swaps are needed.</li>
+        </ul>
+        <p><strong>Time Complexity:</strong> O(n<sup>2</sup>) | <strong>Space Complexity:</strong> O(1)</p>
     </div>
-    <div class = "visualization">
+    
+    <div class="selection-sort">
+        <p>Selection Sort is a simple comparison-based algorithm. It divides the input list into two parts: a sorted sublist built up from left to right, and an unsorted sublist occupying the rest of the list.</p>
+        <ul>
+            <li>Start with the entire list considered as unsorted.</li>
+            <li>Scan the unsorted portion of the list to find the absolute minimum value.</li>
+            <li>Swap this minimum value with the first element of the unsorted portion.</li>
+            <li>The sorted boundary now moves one element to the right.</li>
+            <li>Repeat the scanning and swapping process for the remaining unsorted portion until the entire list is sorted.</li>
+        </ul>
+        <p><strong>Time Complexity:</strong> O(n<sup>2</sup>) | <strong>Space Complexity:</strong> O(1)</p>
+    </div>
+    
+    <div class="insertion-sort">
+        <p>Insertion Sort builds the final sorted array one item at a time. It behaves similarly to how a person might sort a hand of playing cards.</p>
+        <ul>
+            <li>Assume the first element is already sorted.</li>
+            <li>Pick the next element and compare it to the elements in the sorted portion, moving backwards from right to left.</li>
+            <li>Shift all elements in the sorted portion that are strictly greater than the picked element one position to the right.</li>
+            <li>Insert the picked element into its newly vacated, correct position.</li>
+            <li>Repeat this process until all elements have been inserted into their correct sorted places.</li>
+        </ul>
+        <p><strong>Time Complexity:</strong> O(n<sup>2</sup>) | <strong>Space Complexity:</strong> O(1)</p>
+    </div>
+    
+    <div class="merge-sort">
+        <p>Merge Sort is an efficient, general-purpose sorting algorithm based on the divide-and-conquer strategy.</p>
+        <ul>
+            <li>Divide the unsorted list exactly in half to create two sub-lists.</li>
+            <li>Continue dividing the sub-lists recursively until every sub-list contains only a single element (a list of one is considered sorted).</li>
+            <li>Begin merging the sub-lists back together by comparing the first elements of two lists and taking the smaller one.</li>
+            <li>Continue merging and ordering these sub-lists until only one sorted list remains, which is the final output.</li>
+        </ul>
+        <p><strong>Time Complexity:</strong> O(n log n) | <strong>Space Complexity:</strong> O(n)</p>
+    </div>
+    
+    <div class="quick-sort">
+        <p>Quick Sort is a highly efficient divide-and-conquer algorithm that relies on a central pivot point to partition the array.</p>
+        <ul>
+            <li>Select an element from the list to serve as the "pivot" (often the last element or a random element).</li>
+            <li>Reorder the list so that all elements with values less than the pivot come before it, and all elements with values greater than the pivot come after it.</li>
+            <li>The pivot is now strictly in its final sorted position.</li>
+            <li>Recursively apply the above steps to the sub-list of elements with smaller values and the sub-list of elements with greater values.</li>
+        </ul>
+        <p><strong>Time Complexity:</strong> O(n log n) | <strong>Space Complexity:</strong> O(log n)</p>
+    </div>
+    
+    <div class="heap-sort">
+        <p>Heap Sort is a comparison-based sorting technique based on a Binary Heap data structure. It is similar to Selection Sort but uses a heap to find the maximum value faster.</p>
+        <ul>
+            <li>Treat the initial list as a binary tree and transform it into a "Max-Heap" structure (where the parent node is always larger than its children).</li>
+            <li>Take the root of the Max-Heap (which is guaranteed to be the largest number) and swap it with the last item in the list.</li>
+            <li>Conceptually remove this largest item from the heap (it is now sorted at the end of the array).</li>
+            <li>Rebuild the Max-Heap structure for the remaining elements to push the next largest number to the root.</li>
+            <li>Repeat the swapping and rebuilding process until the heap size is reduced to zero.</li>
+        </ul>
+        <p><strong>Time Complexity:</strong> O(n log n) | <strong>Space Complexity:</strong> O(1)</p>
+    </div>
+    
+    <div class="radix-sort">
+        <p>Radix Sort avoids direct comparison by sorting numbers digit by digit, from least significant to most significant.</p>
+        <ul>
+            <li>Find the largest number in the list to determine the maximum number of digits.</li>
+            <li>Start sorting the numbers based strictly on their least significant digit (the ones place) using a stable subroutine like Counting Sort.</li>
+            <li>Move to the next digit (the tens place) and re-sort the entire list based solely on that digit.</li>
+            <li>Repeat this process for every digit position up to the most significant digit. Once the final digit is processed, the list is completely sorted.</li>
+        </ul>
+        <p><strong>Time Complexity:</strong> O(d &times; (n + k)) | <strong>Space Complexity:</strong> O(n + k)</p>
+    </div>
+    
+    <div class="counting-sort">
+        <p>Counting Sort is an integer sorting algorithm that operates without comparing elements. Instead, it relies on counting the occurrences of distinct elements.</p>
+        <ul>
+            <li>Find the maximum value in the input list to determine the range of the data.</li>
+            <li>Create an auxiliary "count" array of that size, initially filled with zeros.</li>
+            <li>Iterate through the input list, using the element's value as an index in the count array to increment its tally.</li>
+            <li>Modify the count array by adding the previous counts to the current count, turning the tallies into actual positional indexes.</li>
+            <li>Iterate backwards through the initial list, placing elements into their final sorted array based on the indexes in the count array.</li>
+        </ul>
+        <p><strong>Time Complexity:</strong> O(n + k) | <strong>Space Complexity:</strong> O(n + k)</p>
+    </div>
+    
+    <div class="shell-sort">
+        <p>Shell Sort is an optimization of Insertion Sort that allows the exchange of items that are far apart. It uses a sequence of gaps to determine which elements to compare and sort.</p>
+        <ul>
+            <li>Start with a large gap and sort the elements at that gap distance using a modified insertion sort.</li>
+            <li>Gradually reduce the gap and repeat the sorting process for each new gap until the gap is reduced to 1, at which point the list is fully sorted.</li>
+        </ul>
+        <p><strong>Time Complexity:</strong> O(n<sup>1.5</sup>) | <strong>Space Complexity:</strong> O(1)</p>
+    </div>
+    
+    <div class="bucket-sort">
+        <p>Bucket Sort is a distribution sort that scatters elements into several "buckets" based on their value ranges.</p>
+        <ul>
+            <li>Create an array of initially empty "buckets" (sub-arrays).</li>
+            <li>Iterate through the original list and distribute each element into a specific bucket based on a mathematical range calculation.</li>
+            <li>Sort each non-empty bucket individually. This is usually done using Insertion Sort.</li>
+            <li>Visit the buckets in order and concatenate their sorted contents back into the original array.</li>
+        </ul>
+        <p><strong>Time Complexity:</strong> O(n + k) | <strong>Space Complexity:</strong> O(n + k)</p>
+    </div>
+    
+    <div class="linear-search">
+        <p>Linear Search is the most basic searching algorithm. It sequentially checks each element in a list until a match is found or the whole list has been searched.</p>
+        <ul>
+            <li>Start at the first element of the list.</li>
+            <li>Compare the current element with the target value. If it matches, return the current index.</li>
+            <li>If it does not match, move to the next element in the list.</li>
+            <li>Continue this process until the target is found or the end of the list is reached.</li>
+        </ul>
+        <p><strong>Time Complexity:</strong> O(n) | <strong>Space Complexity:</strong> O(1)</p>
+    </div>
+    
+    <div class="binary-search">
+        <p>Binary Search is a highly efficient algorithm for finding an item from a sorted list of items. It works by repeatedly dividing in half the portion of the list that could contain the item.</p>
+        <ul>
+            <li>Start by identifying the middle element of the sorted list.</li>
+            <li>Compare the target value to the middle element. If they match, return the index.</li>
+            <li>If the target is smaller than the middle element, narrow the search to the left half of the list.</li>
+            <li>If the target is larger, narrow the search to the right half.</li>
+            <li>Repeat this halving process until the target is found or the search space is empty.</li>
+        </ul>
+        <p><strong>Time Complexity:</strong> O(log n) | <strong>Space Complexity:</strong> O(1)</p>
+    </div>
+    
+    <div class="jump-search">
+        <p>Jump Search is an algorithm for sorted arrays that checks fewer elements than Linear Search by jumping ahead by fixed steps.</p>
+        <ul>
+            <li>Calculate a jump step size, typically the square root of the list's length.</li>
+            <li>Jump forward by the step size until you reach an element that is larger than the target value.</li>
+            <li>Once a larger element is found (or the end is reached), perform a standard Linear Search backwards within that previous block.</li>
+            <li>Repeat the linear comparison until the target is found or the block ends.</li>
+        </ul>
+        <p><strong>Time Complexity:</strong> O(&radic;n) | <strong>Space Complexity:</strong> O(1)</p>
+    </div>
+    
+    <div class="interpolation-search">
+        <p>Interpolation Search is an improvement over Binary Search for instances where the values in a sorted array are uniformly distributed. It estimates the position of the target like a human searching a dictionary.</p>
+        <ul>
+            <li>Calculate the probable position of the target based on the values at the low and high bounds of the list.</li>
+            <li>Probe that calculated index. If it matches the target, return the index.</li>
+            <li>If the target is smaller than the probed value, calculate a new position in the lower sub-list.</li>
+            <li>If the target is larger, calculate a new position in the upper sub-list.</li>
+            <li>Repeat until the target is found or the calculated bounds cross each other.</li>
+        </ul>
+        <p><strong>Time Complexity:</strong> O(log(log n)) | <strong>Space Complexity:</strong> O(1)</p>
+    </div>
+    
+    <div class="exponential-search">
+        <p>Exponential Search determines a range where the search key may be present, and then performs a Binary Search within that specific range.</p>
+        <ul>
+            <li>Check if the first element is the target. If not, set an index pointer to 1.</li>
+            <li>Repeatedly double the index pointer (1, 2, 4, 8...) as long as the element at that index is less than the target.</li>
+            <li>Once the element at the index is greater than the target, you have found a bounded range.</li>
+            <li>Perform a standard Binary Search between the previous index and the current index to find the exact position.</li>
+        </ul>
+        <p><strong>Time Complexity:</strong> O(log n) | <strong>Space Complexity:</strong> O(1)</p>
+    </div>
+
+    <div class="visualization">
         <h2>Visualization</h2>
-    </div>
-    <div class = "visualization-content" id="visualization">
-        <!-- Visualization will be rendered here -->
-    </div>
-    <div class = "bubble-sort">
-            <p>Bubble Sort is one of the simplest sorting algorithms. It repeatedly compares adjacent elements in a list and swaps them if they are in the wrong order. This process continues until the list is sorted.
-
-            Start at the beginning of the list.
-            Compare the first element with the second. If the first is greater than the second, swap them.
-            Move to the next pair and repeat the comparison and swapping process.
-            Continue this for all elements in the list. After one pass, the largest element "bubbles up" to its correct position at the end of the list.
-            Repeat the above steps for the remaining unsorted portion of the list until no swaps are needed.
-            Time Complexity : O(N2)
-
-            Space Complexity : O(1)</p>
-    </div>
-    <div class = "selection-sort">
-            <p>Selection Sort is a simple comparison-based algorithm. It divides the input list into two parts: a sorted sublist built up from left to right, and an unsorted sublist occupying the rest of the list.Start with the entire list considered as unsorted.Scan the unsorted portion of the list to find the absolute minimum value.Swap this minimum value with the first element of the unsorted portion.The sorted boundary now moves one element to the right.Repeat the scanning and swapping process for the remaining unsorted portion until the entire list is sorted.Time Complexity: $O(n^2)$Space Complexity: $O(1)$
-            </p>
-    </div>
-    <div class = "insertion-sort">
-        <p>
-            Insertion Sort builds the final sorted array one item at a time. It behaves similarly to how a person might sort a hand of playing cards.Assume the first element is already sorted.Pick the next element and compare it to the elements in the sorted portion, moving backwards from right to left.Shift all elements in the sorted portion that are strictly greater than the picked element one position to the right.Insert the picked element into its newly vacated, correct position.Repeat this process until all elements have been inserted into their correct sorted places.Time Complexity: $O(n^2)$Space Complexity: $O(1)$
-        </p>
-    </div>
-    <div class = "merge-sort">
-        <p>
-            Merge Sort is an efficient, general-purpose sorting algorithm based on the divide-and-conquer strategy.Divide the unsorted list exactly in half to create two sub-lists.Continue dividing the sub-lists recursively until every sub-list contains only a single element (a list of one is considered sorted).Begin merging the sub-lists back together by comparing the first elements of two lists and taking the smaller one.Continue merging and ordering these sub-lists until only one sorted list remains, which is the final output.Time Complexity: $O(n \log n)$Space Complexity: $O(n)$
-        </p>
-    </div>
-    <div class = "quick-sort">
-        <p>
-            Quick Sort is a highly efficient divide-and-conquer algorithm that relies on a central pivot point to partition the array.Select an element from the list to serve as the "pivot" (often the last element or a random element).Reorder the list so that all elements with values less than the pivot come before it, and all elements with values greater than the pivot come after it.The pivot is now strictly in its final sorted position.Recursively apply the above steps to the sub-list of elements with smaller values and the sub-list of elements with greater values.Time Complexity: $O(n \log n)$Space Complexity: $O(\log n)$
-        </p>
-    </div>
-    <div class = "heap-sort">
-        <p>
-            Heap Sort is a comparison-based sorting technique based on a Binary Heap data structure. It is similar to Selection Sort but uses a heap to find the maximum value faster.Treat the initial list as a binary tree and transform it into a "Max-Heap" structure (where the parent node is always larger than its children).Take the root of the Max-Heap (which is guaranteed to be the largest number) and swap it with the last item in the list.Conceptually remove this largest item from the heap (it is now sorted at the end of the array).Rebuild the Max-Heap structure for the remaining elements to push the next largest number to the root.Repeat the swapping and rebuilding process until the heap size is reduced to zero.Time Complexity: $O(n \log n)$Space Complexity: $O(1)$
-        </p>
-    </div>
-    <div class = "radix-sort">
-        <p>
-            Radix Sort avoids direct comparison by sorting numbers digit by digit, from least significant to most significant.Find the largest number in the list to determine the maximum number of digits.Start sorting the numbers based strictly on their least significant digit (the ones place) using a stable subroutine like Counting Sort.Move to the next digit (the tens place) and re-sort the entire list based solely on that digit.Repeat this process for every digit position up to the most significant digit. Once the final digit is processed, the list is completely sorted.Time Complexity: $O(d \cdot (n + k))$Space Complexity: $O(n + k)$
-        </p>
-    </div>
-    <div class = "counting-sort">
-        <p>
-            Counting Sort is an integer sorting algorithm that operates without comparing elements. Instead, it relies on counting the occurrences of distinct elements.Find the maximum value in the input list to determine the range of the data.Create an auxiliary "count" array of that size, initially filled with zeros.Iterate through the input list, using the element's value as an index in the count array to increment its tally.Modify the count array by adding the previous counts to the current count, turning the tallies into actual positional indexes.Iterate backwards through the initial list, placing elements into their final sorted array based on the indexes in the count array.Time Complexity: $O(n + k)$Space Complexity: $O(n + k)$
-        </p>
-    </div>
-    <div class = "shell-sort">
-        <p>
-            Shell Sort is an optimization of Insertion Sort that allows the exchange of items that are far apart. It uses a sequence of gaps to determine which elements to compare and sort.Start with a large gap and sort the elements at that gap distance using a modified insertion sort.Gradually reduce the gap and repeat the sorting process for each new gap until the gap is reduced to 1, at which point the list is fully sorted.Time Complexity: $O(n^{1.5})$ (depends on the gap sequence)Space Complexity: $O(1)$
-        </p>
-    </div>
-    <div class = "bucket-sort">
-        <p>
-            Bucket Sort is a distribution sort that scatters elements into several "buckets" based on their value ranges.Create an array of initially empty "buckets" (sub-arrays).Iterate through the original list and distribute each element into a specific bucket based on a mathematical range calculation (e.g., placing values 0-9 in bucket 1, 10-19 in bucket 2).Sort each non-empty bucket individually. This is usually done using Insertion Sort.Visit the buckets in order and concatenate their sorted contents back into the original array.Time Complexity: $O(n + k)$Space Complexity: $O(n + k)$
-    </div>
-    <div class = "linear-search">
-        <p>
-            Linear SearchLinear Search is the most basic searching algorithm. It sequentially checks each element in a list until a match is found or the whole list has been searched.Start at the first element of the list.Compare the current element with the target value. If it matches, return the current index.If it does not match, move to the next element in the list.Continue this process until the target is found or the end of the list is reached.Time Complexity: $O(n)$Space Complexity: $O(1)$
-        </p>
-    </div>
-    <div class = "binary-search">
-        <p>
-            Binary Search is a highly efficient algorithm for finding an item from a sorted list of items. It works by repeatedly dividing in half the portion of the list that could contain the item.Start by identifying the middle element of the sorted list.Compare the target value to the middle element. If they match, return the index.If the target is smaller than the middle element, narrow the search to the left half of the list.If the target is larger, narrow the search to the right half.Repeat this halving process until the target is found or the search space is empty.Time Complexity: $O(\log n)$Space Complexity: $O(1)$
-        </p>
-    </div>
-    <div class = "jump-search">
-        <p>
-            Jump Search is an algorithm for sorted arrays that checks fewer elements than Linear Search by jumping ahead by fixed steps.Calculate a jump step size, typically the square root of the list's length.Jump forward by the step size until you reach an element that is larger than the target value.Once a larger element is found (or the end is reached), perform a standard Linear Search backwards within that previous block.Repeat the linear comparison until the target is found or the block ends.Time Complexity: $O(\sqrt{n})$Space Complexity: $O(1)$
-    </div>
-    <div class = "interpolation-search">
-        <p>
-            Interpolation Search is an improvement over Binary Search for instances where the values in a sorted array are uniformly distributed. It estimates the position of the target like a human searching a dictionary.Calculate the probable position of the target based on the values at the low and high bounds of the list.Probe that calculated index. If it matches the target, return the index.If the target is smaller than the probed value, calculate a new position in the lower sub-list.If the target is larger, calculate a new position in the upper sub-list.Repeat until the target is found or the calculated bounds cross each other.Time Complexity: $O(\log(\log n))$Space Complexity: $O(1)$
-        </p>
-    </div>
-    <div class = "exponential-search">
-        <p>
-            Exponential Search determines a range where the search key may be present, and then performs a Binary Search within that specific range.Check if the first element is the target. If not, set an index pointer to 1.Repeatedly double the index pointer (1, 2, 4, 8...) as long as the element at that index is less than the target.Once the element at the index is greater than the target, you have found a bounded range.Perform a standard Binary Search between the previous index and the current index to find the exact position.Time Complexity: $O(\log n)$Space Complexity: $O(1)$
-        </p>
     </div>
 </body>
 </html>

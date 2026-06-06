@@ -1,0 +1,85 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0px;
+    padding: 0px;
+    background-color: #f4f4f4;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center; 
+    padding: 15px 30px;
+    background-color: #333;
+    color: #fff;
+}
+
+.header h1 {
+    margin: 0; 
+    font-size: 28px;
+}
+
+.nav-controls {
+    display: flex;
+    gap: 20px; 
+    align-items: center;
+}
+
+.sorting-algorithms-dropdown select,
+.searching-algorithms-dropdown select {
+    padding: 8px 12px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+}
+
+.theory {
+    padding: 20px;
+    margin: 20px 20px 0 20px; 
+}
+
+div[class$="-sort"] p, 
+div[class$="-search"] p {
+    padding: 0 40px;
+    line-height: 1.6;
+}
+
+.visualization {
+    display: flex;
+    justify-content: center;  
+    align-items: center;
+    height: 400px;
+    margin: 20px;
+    background-color: #e0e0e0; 
+    border-radius: 8px;
+}
+
+.visualization h2 {
+    color: #555;
+}
+
+div[class$="-sort"] ul, 
+div[class$="-search"] ul {
+    padding-left: 60px; 
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+div[class$="-sort"] li, 
+div[class$="-search"] li {
+    line-height: 1.6;
+    margin-bottom: 8px; 
+    color: #333;
+}
+
+div[class$="-sort"] p:last-child, 
+div[class$="-search"] p:last-child {
+    font-size: 0.95rem;
+    color: #444;
+    background-color: #eee;
+    padding: 10px 40px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-left: 40px;
+}
