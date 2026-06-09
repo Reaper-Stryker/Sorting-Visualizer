@@ -30,3 +30,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
     showTheory(sortSelect.value, "sort");
 });
+
+const visualizationContainer = document.querySelector('.visualization');
+const generateArrayBtn = document.getElementById('generate-array');
+let array = [];
+
+function generateArray(size = 30) {
+    array = [];
+    visualizationContainer.innerHTML = ''; 
+    
+    for (let i = 0; i < size; i++) {
+        const value = Math.floor(Math.random() * 370) + 10;
+        array.push(value);
+        
+        const bar = document.createElement('div');
+        bar.classList.add('bar');
+        bar.style.height = `${value}px`;
+        
+        visualizationContainer.appendChild(bar);
+    }
+}
+
+generateArrayBtn.addEventListener('click', () => {
+    generateArray();
+});
+
+generateArray();
