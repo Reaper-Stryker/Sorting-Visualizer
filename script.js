@@ -228,6 +228,80 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+async function merge(bars, left, mid, right) {
+    let delay = getDelay();
+    let n1 = mid - left + 1;
+    let n2 = right - mid;
+
+    let leftArray = new Array(n1);
+    let rightArray = new Array(n2);
+
+    for (let i = 0; i < n1; i++) {
+        await sleep(delay);
+        bars[left + i].style.backgroundColor = '#e67e22'; 
+        leftArray[i] = parseInt(bars[left + i].style.height);
+    }
+    for (let j = 0; j < n2; j++) {
+        await sleep(delay);
+        bars[mid + 1 + j].style.backgroundColor = '#f1c40f'; 
+        rightArray[j] = parseInt(bars[mid + 1 + j].style.height);
+    }
+
+    await sleep(delay);
+
+    let i = 0, j = 0, k = left;
+    
+    while (i < n1 && j < n2) {
+        await sleep(delay);
+        if (leftArray[i] <= rightArray[j]) {
+            bars[k].style.height = `${leftArray[i]}px`;
+            bars[k].style.backgroundColor = '#2ecc71'; 
+            i++;
+        } else {
+            bars[k].style.height = `${rightArray[j]}px`;
+            bars[k].style.backgroundColor = '#2ecc71'; 
+            j++;
+        }
+        k++;
+    }
+
+    while (i < n1) {
+        await sleep(delay);
+        bars[k].style.height = `${leftArray[i]}px`;
+        bars[k].style.backgroundColor = '#2ecc71';
+        i++;
+        k++;
+    }
+
+    while (j < n2) {
+        await sleep(delay);
+        bars[k].style.height = `${rightArray[j]}px`;
+        bars[k].style.backgroundColor = '#2ecc71';
+        j++;
+        k++;
+    }
+}
+
+async function mergeSortRecursive(bars, left, right) {
+    if (left >= right) {
+        return;
+    }
+    let mid = left + Math.floor((right - left) / 2);
+    
+    await mergeSortRecursive(bars, left, mid);
+    await mergeSortRecursive(bars, mid + 1, right);
+    await merge(bars, left, mid, right);
+}
+
+async function mergeSort() {
+    const bars = document.querySelectorAll('.bar');
+    await mergeSortRecursive(bars, 0, bars.length - 1);
+    
+    for(let k = 0; k < bars.length; k++){
+        bars[k].style.backgroundColor = '#2ecc71';
+    }
+}
+
     sortBtn.addEventListener('click', async () => {
         const selectedAlgo = sortSelect.value;
 
@@ -236,7 +310,7 @@ document.addEventListener("DOMContentLoaded", () => {
         sortSelect.disabled = true;
         document.getElementById('speed-select').disabled = true;
 
-        if (selectedAlgo === 'bubble') {
+            if (selectedAlgo === 'bubble') {
             await bubbleSort();
         } else if (selectedAlgo === 'selection') {
             await selectionSort();
@@ -244,6 +318,8 @@ document.addEventListener("DOMContentLoaded", () => {
             await insertionSort();
         } else if (selectedAlgo === 'quick') {
             await quickSort();
+        } else if (selectedAlgo === 'merge') { 
+            await mergeSort();
         }
 
         sortBtn.disabled = false;
