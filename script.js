@@ -5,6 +5,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const visualizationContainer = document.querySelector('.visualization');
     const generateArrayBtn = document.getElementById('generate-array');
     const sortBtn = document.getElementById('sort-btn');
+    const searchBtn = document.getElementById('search-btn');
+    const sizeSlider = document.getElementById('size-slider');
+    const targetInput = document.getElementById('search-target');
 
     let array = [];
 
@@ -16,6 +19,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function showTheory(value, type) {
         hideAllSections();
+        if (!value) return; 
+        
         const targetClass = `.${value}-${type}`;
         const targetSection = document.querySelector(targetClass);
         
@@ -34,10 +39,13 @@ document.addEventListener("DOMContentLoaded", () => {
         showTheory(e.target.value, "search");
     });
 
-    sortSelect.value = "bubble";
+    sortSelect.value = "bubble";  
+    searchSelect.value = "";     
     showTheory("bubble", "sort");
 
-    function generateArray(size = 30) {
+
+    function generateArray() {
+        let size = parseInt(sizeSlider.value);
         array = [];
         visualizationContainer.innerHTML = ''; 
         
@@ -53,7 +61,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         const randomTargetIndex = Math.floor(Math.random() * array.length);
-        const targetInput = document.getElementById('search-target');
         if(targetInput) {
             targetInput.value = array[randomTargetIndex];
         }
@@ -63,7 +70,12 @@ document.addEventListener("DOMContentLoaded", () => {
         generateArray();
     });
 
+    sizeSlider.addEventListener('input', () => {
+        generateArray();
+    });
+
     generateArray();
+
 
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
@@ -79,13 +91,13 @@ document.addEventListener("DOMContentLoaded", () => {
         return 50; 
     }
 
+
     async function bubbleSort() {
         const bars = document.querySelectorAll('.bar');
         let delay = getDelay();
 
         for (let i = 0; i < bars.length - 1; i++) {
             for (let j = 0; j < bars.length - i - 1; j++) {
-                
                 bars[j].style.backgroundColor = '#e74c3c'; 
                 bars[j + 1].style.backgroundColor = '#e74c3c';
 
@@ -117,7 +129,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             for (let j = i + 1; j < bars.length; j++) {
                 bars[j].style.backgroundColor = '#f1c40f'; 
-                
                 await sleep(delay);
 
                 let height1 = parseInt(bars[j].style.height);
@@ -160,7 +171,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             while (j >= 0 && parseInt(bars[j].style.height) > keyHeight) {
                 bars[j].style.backgroundColor = '#e74c3c';
-                
                 bars[j + 1].style.height = bars[j].style.height; 
                 
                 await sleep(delay);
@@ -181,7 +191,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async function partition(bars, low, high) {
         let delay = getDelay();
-        
         let pivot = parseInt(bars[high].style.height);
         bars[high].style.backgroundColor = '#e74c3c'; 
 
@@ -237,79 +246,79 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-async function merge(bars, left, mid, right) {
-    let delay = getDelay();
-    let n1 = mid - left + 1;
-    let n2 = right - mid;
+    async function merge(bars, left, mid, right) {
+        let delay = getDelay();
+        let n1 = mid - left + 1;
+        let n2 = right - mid;
 
-    let leftArray = new Array(n1);
-    let rightArray = new Array(n2);
+        let leftArray = new Array(n1);
+        let rightArray = new Array(n2);
 
-    for (let i = 0; i < n1; i++) {
-        await sleep(delay);
-        bars[left + i].style.backgroundColor = '#e67e22'; 
-        leftArray[i] = parseInt(bars[left + i].style.height);
-    }
-    for (let j = 0; j < n2; j++) {
-        await sleep(delay);
-        bars[mid + 1 + j].style.backgroundColor = '#f1c40f'; 
-        rightArray[j] = parseInt(bars[mid + 1 + j].style.height);
-    }
-
-    await sleep(delay);
-
-    let i = 0, j = 0, k = left;
-    
-    while (i < n1 && j < n2) {
-        await sleep(delay);
-        if (leftArray[i] <= rightArray[j]) {
-            bars[k].style.height = `${leftArray[i]}px`;
-            bars[k].style.backgroundColor = '#2ecc71'; 
-            i++;
-        } else {
-            bars[k].style.height = `${rightArray[j]}px`;
-            bars[k].style.backgroundColor = '#2ecc71'; 
-            j++;
+        for (let i = 0; i < n1; i++) {
+            await sleep(delay);
+            bars[left + i].style.backgroundColor = '#e67e22'; 
+            leftArray[i] = parseInt(bars[left + i].style.height);
         }
-        k++;
-    }
+        for (let j = 0; j < n2; j++) {
+            await sleep(delay);
+            bars[mid + 1 + j].style.backgroundColor = '#f1c40f'; 
+            rightArray[j] = parseInt(bars[mid + 1 + j].style.height);
+        }
 
-    while (i < n1) {
         await sleep(delay);
-        bars[k].style.height = `${leftArray[i]}px`;
-        bars[k].style.backgroundColor = '#2ecc71';
-        i++;
-        k++;
+
+        let i = 0, j = 0, k = left;
+        
+        while (i < n1 && j < n2) {
+            await sleep(delay);
+            if (leftArray[i] <= rightArray[j]) {
+                bars[k].style.height = `${leftArray[i]}px`;
+                bars[k].style.backgroundColor = '#2ecc71'; 
+                i++;
+            } else {
+                bars[k].style.height = `${rightArray[j]}px`;
+                bars[k].style.backgroundColor = '#2ecc71'; 
+                j++;
+            }
+            k++;
+        }
+
+        while (i < n1) {
+            await sleep(delay);
+            bars[k].style.height = `${leftArray[i]}px`;
+            bars[k].style.backgroundColor = '#2ecc71';
+            i++;
+            k++;
+        }
+
+        while (j < n2) {
+            await sleep(delay);
+            bars[k].style.height = `${rightArray[j]}px`;
+            bars[k].style.backgroundColor = '#2ecc71';
+            j++;
+            k++;
+        }
     }
 
-    while (j < n2) {
-        await sleep(delay);
-        bars[k].style.height = `${rightArray[j]}px`;
-        bars[k].style.backgroundColor = '#2ecc71';
-        j++;
-        k++;
+    async function mergeSortRecursive(bars, left, right) {
+        if (left >= right) {
+            return;
+        }
+        let mid = left + Math.floor((right - left) / 2);
+        
+        await mergeSortRecursive(bars, left, mid);
+        await mergeSortRecursive(bars, mid + 1, right);
+        await merge(bars, left, mid, right);
     }
-}
 
-async function mergeSortRecursive(bars, left, right) {
-    if (left >= right) {
-        return;
+    async function mergeSort() {
+        const bars = document.querySelectorAll('.bar');
+        await mergeSortRecursive(bars, 0, bars.length - 1);
+        
+        for(let k = 0; k < bars.length; k++){
+            bars[k].style.backgroundColor = '#2ecc71';
+        }
     }
-    let mid = left + Math.floor((right - left) / 2);
-    
-    await mergeSortRecursive(bars, left, mid);
-    await mergeSortRecursive(bars, mid + 1, right);
-    await merge(bars, left, mid, right);
-}
-
-async function mergeSort() {
-    const bars = document.querySelectorAll('.bar');
-    await mergeSortRecursive(bars, 0, bars.length - 1);
-    
-    for(let k = 0; k < bars.length; k++){
-        bars[k].style.backgroundColor = '#2ecc71';
-    }
-}
 
     async function linearSearch() {
         const bars = document.querySelectorAll('.bar');
@@ -330,6 +339,7 @@ async function mergeSort() {
             }
         }
     }
+
     async function binarySearch() {
         const bars = document.querySelectorAll('.bar');
         let delay = getDelay();
@@ -375,15 +385,18 @@ async function mergeSort() {
         }
     }
 
+
     sortBtn.addEventListener('click', async () => {
         const selectedAlgo = sortSelect.value;
 
         sortBtn.disabled = true;
+        searchBtn.disabled = true;
         generateArrayBtn.disabled = true;
         sortSelect.disabled = true;
+        searchSelect.disabled = true;
         document.getElementById('speed-select').disabled = true;
 
-            if (selectedAlgo === 'bubble') {
+        if (selectedAlgo === 'bubble') {
             await bubbleSort();
         } else if (selectedAlgo === 'selection') {
             await selectionSort();
@@ -396,18 +409,22 @@ async function mergeSort() {
         }
 
         sortBtn.disabled = false;
+        searchBtn.disabled = false;
         generateArrayBtn.disabled = false;
         sortSelect.disabled = false;
+        searchSelect.disabled = false;
         document.getElementById('speed-select').disabled = false;
     });
-    const searchBtn = document.getElementById('search-btn');
 
     searchBtn.addEventListener('click', async () => {
-        const selectedSearch = document.getElementById('search-algorithm').value;
+        const selectedSearch = searchSelect.value;
 
         searchBtn.disabled = true;
         sortBtn.disabled = true;
         generateArrayBtn.disabled = true;
+        sortSelect.disabled = true;
+        searchSelect.disabled = true;
+        document.getElementById('speed-select').disabled = true;
 
         const bars = document.querySelectorAll('.bar');
         bars.forEach(bar => bar.style.backgroundColor = '#3498db');
@@ -417,8 +434,12 @@ async function mergeSort() {
         } else if (selectedSearch === 'binary') {
             await binarySearch();
         }
+
         searchBtn.disabled = false;
         sortBtn.disabled = false;
         generateArrayBtn.disabled = false;
+        sortSelect.disabled = false;
+        searchSelect.disabled = false;
+        document.getElementById('speed-select').disabled = false;
     });
 });
