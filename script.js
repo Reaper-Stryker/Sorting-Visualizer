@@ -25,14 +25,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     sortSelect.addEventListener("change", (e) => {
+        searchSelect.value = ""; 
         showTheory(e.target.value, "sort");
     });
 
     searchSelect.addEventListener("change", (e) => {
+        sortSelect.value = ""; 
         showTheory(e.target.value, "search");
     });
 
-    showTheory(sortSelect.value, "sort");
+    sortSelect.value = "bubble";
+    showTheory("bubble", "sort");
 
     function generateArray(size = 30) {
         array = [];
@@ -47,6 +50,12 @@ document.addEventListener("DOMContentLoaded", () => {
             bar.style.height = `${value}px`;
             
             visualizationContainer.appendChild(bar);
+        }
+
+        const randomTargetIndex = Math.floor(Math.random() * array.length);
+        const targetInput = document.getElementById('search-target');
+        if(targetInput) {
+            targetInput.value = array[randomTargetIndex];
         }
     }
 
@@ -302,6 +311,70 @@ async function mergeSort() {
     }
 }
 
+    async function linearSearch() {
+        const bars = document.querySelectorAll('.bar');
+        let delay = getDelay();
+        let target = parseInt(document.getElementById('search-target').value);
+
+        for (let i = 0; i < bars.length; i++) {
+            bars[i].style.backgroundColor = '#f1c40f'; 
+            await sleep(delay);
+
+            let currentHeight = parseInt(bars[i].style.height);
+
+            if (currentHeight === target) {
+                bars[i].style.backgroundColor = '#2ecc71'; 
+                return; 
+            } else {
+                bars[i].style.backgroundColor = '#e74c3c'; 
+            }
+        }
+    }
+    async function binarySearch() {
+        const bars = document.querySelectorAll('.bar');
+        let delay = getDelay();
+        let target = parseInt(document.getElementById('search-target').value);
+
+        let heights = Array.from(bars).map(bar => parseInt(bar.style.height));
+        heights.sort((a, b) => a - b);
+        for(let i = 0; i < bars.length; i++) {
+            bars[i].style.height = `${heights[i]}px`;
+            bars[i].style.backgroundColor = '#3498db'; 
+        }
+        await sleep(delay); 
+
+        let left = 0;
+        let right = bars.length - 1;
+
+        while (left <= right) {
+            let mid = Math.floor((left + right) / 2);
+
+            bars[left].style.backgroundColor = '#9b59b6'; 
+            bars[right].style.backgroundColor = '#9b59b6'; 
+            bars[mid].style.backgroundColor = '#f1c40f'; 
+            
+            await sleep(delay * 2); 
+
+            let midHeight = parseInt(bars[mid].style.height);
+
+            if (midHeight === target) {
+                bars[mid].style.backgroundColor = '#2ecc71'; 
+                
+                if(left !== mid) bars[left].style.backgroundColor = '#3498db';
+                if(right !== mid) bars[right].style.backgroundColor = '#3498db';
+                return;
+            }
+
+            if (midHeight < target) {
+                for(let i = left; i <= mid; i++) bars[i].style.backgroundColor = '#e74c3c';
+                left = mid + 1;
+            } else {
+                for(let i = mid; i <= right; i++) bars[i].style.backgroundColor = '#e74c3c';
+                right = mid - 1;
+            }
+        }
+    }
+
     sortBtn.addEventListener('click', async () => {
         const selectedAlgo = sortSelect.value;
 
@@ -326,5 +399,26 @@ async function mergeSort() {
         generateArrayBtn.disabled = false;
         sortSelect.disabled = false;
         document.getElementById('speed-select').disabled = false;
+    });
+    const searchBtn = document.getElementById('search-btn');
+
+    searchBtn.addEventListener('click', async () => {
+        const selectedSearch = document.getElementById('search-algorithm').value;
+
+        searchBtn.disabled = true;
+        sortBtn.disabled = true;
+        generateArrayBtn.disabled = true;
+
+        const bars = document.querySelectorAll('.bar');
+        bars.forEach(bar => bar.style.backgroundColor = '#3498db');
+
+        if (selectedSearch === 'linear') {
+            await linearSearch();
+        } else if (selectedSearch === 'binary') {
+            await binarySearch();
+        }
+        searchBtn.disabled = false;
+        sortBtn.disabled = false;
+        generateArrayBtn.disabled = false;
     });
 });

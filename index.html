@@ -19,6 +19,8 @@
         <div class="nav-controls">
             <div class="sorting-algorithms-dropdown">
                 <select name="Sorting Algorithms" id="sorting-algorithm">
+                    <option value="" disabled selected hidden>Select Sorting Algo...</option>
+                    
                     <option value="bubble">Bubble Sort</option>
                     <option value="selection">Selection Sort</option>
                     <option value="insertion">Insertion Sort</option>
@@ -34,6 +36,8 @@
             
             <div class="searching-algorithms-dropdown">
                 <select name="Search Algorithms" id="search-algorithm">
+                    <option value="" disabled selected hidden>Select Searching Algo...</option>
+                    
                     <option value="linear">Linear Search</option>
                     <option value="binary">Binary Search</option>
                     <option value="jump">Jump Search</option>
@@ -47,6 +51,9 @@
                 <option value="medium" selected>Medium</option>
                 <option value="fast">Fast</option>
             </select>
+
+            <input type="number" id="search-target" placeholder="Target" readonly style="width: 70px; padding: 8px; border-radius: 4px; border: none;">
+            <button id="search-btn" class="btn" style="background-color: #9b59b6; color: white;">Search!</button>
 
             <button id="generate-array" class="btn">Generate New Array</button>
             <button id="sort-btn" class="btn sort-btn">Sort!</button>
