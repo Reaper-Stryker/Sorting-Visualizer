@@ -8,6 +8,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const searchBtn = document.getElementById('search-btn');
     const sizeSlider = document.getElementById('size-slider');
     const targetInput = document.getElementById('search-target');
+    const customArrayInput = document.getElementById('custom-array-input');
+    const loadCustomBtn = document.getElementById('load-custom-btn');
 
     let array = [];
 
@@ -44,27 +46,54 @@ document.addEventListener("DOMContentLoaded", () => {
     showTheory("bubble", "sort");
 
 
+    function renderArrayToDOM() {
+        visualizationContainer.innerHTML = ''; 
+        for (let i = 0; i < array.length; i++) {
+            const bar = document.createElement('div');
+            bar.classList.add('bar');
+            bar.style.height = `${array[i]}px`;
+            visualizationContainer.appendChild(bar);
+        }
+    }
+
     function generateArray() {
         let size = parseInt(sizeSlider.value);
         array = [];
-        visualizationContainer.innerHTML = ''; 
-        
         for (let i = 0; i < size; i++) {
             const value = Math.floor(Math.random() * 370) + 10;
             array.push(value);
-            
-            const bar = document.createElement('div');
-            bar.classList.add('bar');
-            bar.style.height = `${value}px`;
-            
-            visualizationContainer.appendChild(bar);
         }
+        
+        renderArrayToDOM();
 
-        const randomTargetIndex = Math.floor(Math.random() * array.length);
-        if(targetInput) {
+        if(targetInput && array.length > 0) {
+            const randomTargetIndex = Math.floor(Math.random() * array.length);
             targetInput.value = array[randomTargetIndex];
         }
     }
+    loadCustomBtn.addEventListener('click', () => {
+        const inputStr = customArrayInput.value;
+        if (!inputStr) return;
+
+        const parsedArr = inputStr.split(',')
+            .map(num => parseInt(num.trim()))
+            .filter(num => !isNaN(num) && num > 0); 
+
+        if (parsedArr.length === 0) {
+            alert("Please enter valid comma-separated numbers (e.g., 50, 120, 200).");
+            return;
+        }
+
+        array = parsedArr;
+        renderArrayToDOM();
+
+        sizeSlider.value = array.length;
+
+        if(targetInput) {
+            const randomTargetIndex = Math.floor(Math.random() * array.length);
+            targetInput.value = array[randomTargetIndex];
+        }
+    });
 
     generateArrayBtn.addEventListener('click', () => {
         generateArray();
@@ -74,7 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
         generateArray();
     });
 
-    generateArray();
+    generateArray(); 
 
 
     function sleep(ms) {
@@ -91,6 +120,19 @@ document.addEventListener("DOMContentLoaded", () => {
         return 50; 
     }
 
+    function toggleUI(disabled) {
+        sortBtn.disabled = disabled;
+        searchBtn.disabled = disabled;
+        generateArrayBtn.disabled = disabled;
+        loadCustomBtn.disabled = disabled;
+        customArrayInput.disabled = disabled;
+        sortSelect.disabled = disabled;
+        searchSelect.disabled = disabled;
+        sizeSlider.disabled = disabled;
+        targetInput.disabled = disabled;
+        document.getElementById('speed-select').disabled = disabled;
+    }
+
 
     async function bubbleSort() {
         const bars = document.querySelectorAll('.bar');
@@ -100,7 +142,6 @@ document.addEventListener("DOMContentLoaded", () => {
             for (let j = 0; j < bars.length - i - 1; j++) {
                 bars[j].style.backgroundColor = '#e74c3c'; 
                 bars[j + 1].style.backgroundColor = '#e74c3c';
-
                 await sleep(delay);
 
                 let height1 = parseInt(bars[j].style.height);
@@ -228,7 +269,6 @@ document.addEventListener("DOMContentLoaded", () => {
     async function quickSortRecursive(bars, low, high) {
         if (low < high) {
             let pivotIndex = await partition(bars, low, high);
-            
             await quickSortRecursive(bars, low, pivotIndex - 1);
             await quickSortRecursive(bars, pivotIndex + 1, high);
         } else if (low >= 0 && high >= 0 && low < bars.length && high < bars.length) {
@@ -240,7 +280,6 @@ document.addEventListener("DOMContentLoaded", () => {
     async function quickSort() {
         const bars = document.querySelectorAll('.bar');
         await quickSortRecursive(bars, 0, bars.length - 1);
-        
         for(let k = 0; k < bars.length; k++){
             bars[k].style.backgroundColor = '#2ecc71'; 
         }
@@ -314,16 +353,18 @@ document.addEventListener("DOMContentLoaded", () => {
     async function mergeSort() {
         const bars = document.querySelectorAll('.bar');
         await mergeSortRecursive(bars, 0, bars.length - 1);
-        
         for(let k = 0; k < bars.length; k++){
             bars[k].style.backgroundColor = '#2ecc71';
         }
     }
 
+
     async function linearSearch() {
         const bars = document.querySelectorAll('.bar');
         let delay = getDelay();
-        let target = parseInt(document.getElementById('search-target').value);
+        
+        let targetVal = document.getElementById('search-target').value;
+        let target = targetVal ? parseInt(targetVal) : -1;
 
         for (let i = 0; i < bars.length; i++) {
             bars[i].style.backgroundColor = '#f1c40f'; 
@@ -338,12 +379,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 bars[i].style.backgroundColor = '#e74c3c'; 
             }
         }
+        
+        alert("Target not found in the array!");
     }
 
     async function binarySearch() {
         const bars = document.querySelectorAll('.bar');
         let delay = getDelay();
-        let target = parseInt(document.getElementById('search-target').value);
+        
+        let targetVal = document.getElementById('search-target').value;
+        let target = targetVal ? parseInt(targetVal) : -1;
 
         let heights = Array.from(bars).map(bar => parseInt(bar.style.height));
         heights.sort((a, b) => a - b);
@@ -383,18 +428,17 @@ document.addEventListener("DOMContentLoaded", () => {
                 right = mid - 1;
             }
         }
+        alert("Target not found in the array!");
     }
-
 
     sortBtn.addEventListener('click', async () => {
         const selectedAlgo = sortSelect.value;
+        if (!selectedAlgo) {
+            alert("Please select a sorting algorithm first.");
+            return;
+        }
 
-        sortBtn.disabled = true;
-        searchBtn.disabled = true;
-        generateArrayBtn.disabled = true;
-        sortSelect.disabled = true;
-        searchSelect.disabled = true;
-        document.getElementById('speed-select').disabled = true;
+        toggleUI(true);
 
         if (selectedAlgo === 'bubble') {
             await bubbleSort();
@@ -408,23 +452,17 @@ document.addEventListener("DOMContentLoaded", () => {
             await mergeSort();
         }
 
-        sortBtn.disabled = false;
-        searchBtn.disabled = false;
-        generateArrayBtn.disabled = false;
-        sortSelect.disabled = false;
-        searchSelect.disabled = false;
-        document.getElementById('speed-select').disabled = false;
+        toggleUI(false);
     });
 
     searchBtn.addEventListener('click', async () => {
         const selectedSearch = searchSelect.value;
+        if (!selectedSearch) {
+            alert("Please select a searching algorithm first.");
+            return;
+        }
 
-        searchBtn.disabled = true;
-        sortBtn.disabled = true;
-        generateArrayBtn.disabled = true;
-        sortSelect.disabled = true;
-        searchSelect.disabled = true;
-        document.getElementById('speed-select').disabled = true;
+        toggleUI(true);
 
         const bars = document.querySelectorAll('.bar');
         bars.forEach(bar => bar.style.backgroundColor = '#3498db');
@@ -435,11 +473,6 @@ document.addEventListener("DOMContentLoaded", () => {
             await binarySearch();
         }
 
-        searchBtn.disabled = false;
-        sortBtn.disabled = false;
-        generateArrayBtn.disabled = false;
-        sortSelect.disabled = false;
-        searchSelect.disabled = false;
-        document.getElementById('speed-select').disabled = false;
+        toggleUI(false);
     });
 });
