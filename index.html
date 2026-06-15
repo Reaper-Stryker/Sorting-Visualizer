@@ -31,6 +31,7 @@
                     <option value="bucket">Bucket Sort</option>
                 </select>
             </div>
+            
             <div class="searching-algorithms-dropdown">
                 <select name="Search Algorithms" id="search-algorithm">
                     <option value="linear">Linear Search</option>
@@ -40,6 +41,13 @@
                     <option value="exponential">Exponential Search</option>
                 </select>
             </div>
+
+            <select id="speed-select">
+                <option value="slow">Slow</option>
+                <option value="medium" selected>Medium</option>
+                <option value="fast">Fast</option>
+            </select>
+
             <button id="generate-array" class="btn">Generate New Array</button>
             <button id="sort-btn" class="btn sort-btn">Sort!</button>
         </div>
@@ -220,8 +228,8 @@
     </div>
 
     <div class="visualization">
-        <h2>Visualization</h2>
-    </div>
+        </div>
+
     <script src="script.js"></script>
 </body>
 </html>
