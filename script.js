@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // 1. Grab all UI Elements
     const sortSelect = document.getElementById("sorting-algorithm");
     const searchSelect = document.getElementById("search-algorithm");
     const allTheorySections = document.querySelectorAll('div[class$="-sort"], div[class$="-search"]');
@@ -12,7 +13,41 @@ document.addEventListener("DOMContentLoaded", () => {
     const loadCustomBtn = document.getElementById('load-custom-btn');
 
     let array = [];
+    
+    // --- Audio Engine Setup ---
+    let audioCtx = null;
 
+    function initAudio() {
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+    }
+
+    function playNote(height) {
+        if (!audioCtx) return;
+
+        // Map the bar height (10-380) to a frequency range (200Hz - 800Hz)
+        const minFreq = 200;
+        const maxFreq = 800;
+        const freq = minFreq + ((height / 380) * (maxFreq - minFreq));
+
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+
+        oscillator.type = 'sine'; 
+        oscillator.frequency.value = freq;
+
+        gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.1);
+
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        oscillator.start();
+        oscillator.stop(audioCtx.currentTime + 0.1); 
+    }
+
+    // --- Theory Display Engine ---
     function hideAllSections() {
         allTheorySections.forEach(section => {
             section.style.display = "none";
@@ -46,6 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
     showTheory("bubble", "sort");
 
 
+    // --- Array Generation Engine ---
     function renderArrayToDOM() {
         visualizationContainer.innerHTML = ''; 
         for (let i = 0; i < array.length; i++) {
@@ -71,6 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
             targetInput.value = array[randomTargetIndex];
         }
     }
+
     loadCustomBtn.addEventListener('click', () => {
         const inputStr = customArrayInput.value;
         if (!inputStr) return;
@@ -86,7 +123,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         array = parsedArr;
         renderArrayToDOM();
-
         sizeSlider.value = array.length;
 
         if(targetInput) {
@@ -106,6 +142,7 @@ document.addEventListener("DOMContentLoaded", () => {
     generateArray(); 
 
 
+    // --- Animation Utility Functions ---
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
@@ -134,6 +171,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
+    // --- Sorting Algorithms ---
     async function bubbleSort() {
         const bars = document.querySelectorAll('.bar');
         let delay = getDelay();
@@ -142,10 +180,12 @@ document.addEventListener("DOMContentLoaded", () => {
             for (let j = 0; j < bars.length - i - 1; j++) {
                 bars[j].style.backgroundColor = '#e74c3c'; 
                 bars[j + 1].style.backgroundColor = '#e74c3c';
-                await sleep(delay);
 
                 let height1 = parseInt(bars[j].style.height);
                 let height2 = parseInt(bars[j + 1].style.height);
+
+                playNote(height1); 
+                await sleep(delay);
 
                 if (height1 > height2) {
                     bars[j].style.height = `${height2}px`;
@@ -170,10 +210,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
             for (let j = i + 1; j < bars.length; j++) {
                 bars[j].style.backgroundColor = '#f1c40f'; 
-                await sleep(delay);
-
+                
                 let height1 = parseInt(bars[j].style.height);
                 let height2 = parseInt(bars[minIdx].style.height);
+                
+                playNote(height1);
+                await sleep(delay);
 
                 if (height1 < height2) {
                     if (minIdx !== i) {
@@ -208,12 +250,14 @@ document.addEventListener("DOMContentLoaded", () => {
             let keyHeight = parseInt(bars[i].style.height);
             
             bars[i].style.backgroundColor = '#e74c3c'; 
+            playNote(keyHeight);
             await sleep(delay);
 
             while (j >= 0 && parseInt(bars[j].style.height) > keyHeight) {
                 bars[j].style.backgroundColor = '#e74c3c';
                 bars[j + 1].style.height = bars[j].style.height; 
                 
+                playNote(parseInt(bars[j].style.height));
                 await sleep(delay);
                 
                 for(let k = i; k >= 0; k--){
@@ -239,6 +283,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         for (let j = low; j <= high - 1; j++) {
             bars[j].style.backgroundColor = '#f1c40f'; 
+            
+            playNote(parseInt(bars[j].style.height));
             await sleep(delay);
 
             if (parseInt(bars[j].style.height) < pivot) {
@@ -309,7 +355,10 @@ document.addEventListener("DOMContentLoaded", () => {
         let i = 0, j = 0, k = left;
         
         while (i < n1 && j < n2) {
+            
+            playNote(leftArray[i] || rightArray[j]);
             await sleep(delay);
+            
             if (leftArray[i] <= rightArray[j]) {
                 bars[k].style.height = `${leftArray[i]}px`;
                 bars[k].style.backgroundColor = '#2ecc71'; 
@@ -323,6 +372,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         while (i < n1) {
+            playNote(leftArray[i]);
             await sleep(delay);
             bars[k].style.height = `${leftArray[i]}px`;
             bars[k].style.backgroundColor = '#2ecc71';
@@ -331,6 +381,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         while (j < n2) {
+            playNote(rightArray[j]);
             await sleep(delay);
             bars[k].style.height = `${rightArray[j]}px`;
             bars[k].style.backgroundColor = '#2ecc71';
@@ -359,18 +410,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
+    // --- Searching Algorithms ---
     async function linearSearch() {
         const bars = document.querySelectorAll('.bar');
         let delay = getDelay();
-        
         let targetVal = document.getElementById('search-target').value;
         let target = targetVal ? parseInt(targetVal) : -1;
 
         for (let i = 0; i < bars.length; i++) {
             bars[i].style.backgroundColor = '#f1c40f'; 
-            await sleep(delay);
-
+            
             let currentHeight = parseInt(bars[i].style.height);
+            playNote(currentHeight);
+            await sleep(delay);
 
             if (currentHeight === target) {
                 bars[i].style.backgroundColor = '#2ecc71'; 
@@ -379,14 +431,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 bars[i].style.backgroundColor = '#e74c3c'; 
             }
         }
-        
         alert("Target not found in the array!");
     }
 
     async function binarySearch() {
         const bars = document.querySelectorAll('.bar');
         let delay = getDelay();
-        
         let targetVal = document.getElementById('search-target').value;
         let target = targetVal ? parseInt(targetVal) : -1;
 
@@ -408,9 +458,9 @@ document.addEventListener("DOMContentLoaded", () => {
             bars[right].style.backgroundColor = '#9b59b6'; 
             bars[mid].style.backgroundColor = '#f1c40f'; 
             
-            await sleep(delay * 2); 
-
             let midHeight = parseInt(bars[mid].style.height);
+            playNote(midHeight);
+            await sleep(delay * 2); 
 
             if (midHeight === target) {
                 bars[mid].style.backgroundColor = '#2ecc71'; 
@@ -431,7 +481,10 @@ document.addEventListener("DOMContentLoaded", () => {
         alert("Target not found in the array!");
     }
 
+
+    // --- Action Button Event Listeners ---
     sortBtn.addEventListener('click', async () => {
+        initAudio(); // Initialize audio context on click
         const selectedAlgo = sortSelect.value;
         if (!selectedAlgo) {
             alert("Please select a sorting algorithm first.");
@@ -456,6 +509,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     searchBtn.addEventListener('click', async () => {
+        initAudio(); // Initialize audio context on click
         const selectedSearch = searchSelect.value;
         if (!selectedSearch) {
             alert("Please select a searching algorithm first.");
