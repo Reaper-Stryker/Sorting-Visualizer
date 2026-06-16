@@ -409,6 +409,276 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // --- Heap Sort ---
+    async function heapify(bars, n, i) {
+        let delay = getDelay();
+        let largest = i;
+        let left = 2 * i + 1;
+        let right = 2 * i + 2;
+
+        // Compare left child
+        if (left < n && parseInt(bars[left].style.height) > parseInt(bars[largest].style.height)) {
+            largest = left;
+        }
+
+        // Compare right child
+        if (right < n && parseInt(bars[right].style.height) > parseInt(bars[largest].style.height)) {
+            largest = right;
+        }
+
+        // If largest is not root
+        if (largest !== i) {
+            bars[i].style.backgroundColor = '#e74c3c'; // Red for swapping
+            bars[largest].style.backgroundColor = '#e74c3c';
+            
+            playNote(parseInt(bars[i].style.height));
+            await sleep(delay);
+
+            let temp = bars[i].style.height;
+            bars[i].style.height = bars[largest].style.height;
+            bars[largest].style.height = temp;
+
+            bars[i].style.backgroundColor = '#3498db'; // Reset to blue
+            bars[largest].style.backgroundColor = '#3498db';
+
+            // Recursively heapify the affected sub-tree
+            await heapify(bars, n, largest);
+        }
+    }
+
+    async function heapSort() {
+        const bars = document.querySelectorAll('.bar');
+        let n = bars.length;
+        let delay = getDelay();
+
+        // Build the initial Max-Heap
+        for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
+            await heapify(bars, n, i);
+        }
+
+        // Extract elements one by one
+        for (let i = n - 1; i > 0; i--) {
+            // Highlight the root (largest) moving to the end
+            bars[0].style.backgroundColor = '#f1c40f'; 
+            
+            playNote(parseInt(bars[0].style.height));
+            await sleep(delay);
+
+            let temp = bars[0].style.height;
+            bars[0].style.height = bars[i].style.height;
+            bars[i].style.height = temp;
+
+            // The item placed at the end is now sorted
+            bars[i].style.backgroundColor = '#2ecc71'; 
+
+            // Call max heapify on the reduced heap
+            await heapify(bars, i, 0);
+        }
+        // Ensure the very first element is marked green
+        if(bars[0]) bars[0].style.backgroundColor = '#2ecc71';
+    }
+
+    // --- Shell Sort ---
+    async function shellSort() {
+        const bars = document.querySelectorAll('.bar');
+        let n = bars.length;
+        let delay = getDelay();
+
+        // Start with a large gap, then reduce the gap
+        for (let gap = Math.floor(n / 2); gap > 0; gap = Math.floor(gap / 2)) {
+            
+            for (let i = gap; i < n; i += 1) {
+                let temp = parseInt(bars[i].style.height);
+                bars[i].style.backgroundColor = '#e74c3c'; // Red for current key
+                
+                playNote(temp);
+                await sleep(delay);
+
+                let j;
+                for (j = i; j >= gap && parseInt(bars[j - gap].style.height) > temp; j -= gap) {
+                    // Highlight the gap comparison
+                    bars[j].style.backgroundColor = '#f1c40f';
+                    bars[j - gap].style.backgroundColor = '#f1c40f';
+                    
+                    playNote(parseInt(bars[j - gap].style.height));
+                    await sleep(delay);
+
+                    bars[j].style.height = bars[j - gap].style.height;
+
+                    // Reset colors
+                    bars[j].style.backgroundColor = '#3498db';
+                    bars[j - gap].style.backgroundColor = '#3498db';
+                }
+                
+                bars[j].style.height = `${temp}px`;
+                bars[i].style.backgroundColor = '#3498db';
+            }
+        }
+        
+        // Shell Sort completes in place, so we do a satisfying green sweep at the end
+        for (let i = 0; i < n; i++) {
+            bars[i].style.backgroundColor = '#2ecc71';
+            playNote(parseInt(bars[i].style.height));
+            await sleep(10); // Fast sweep speed
+        }
+    }
+
+    // --- Counting Sort ---
+    async function countingSort() {
+        const bars = document.querySelectorAll('.bar');
+        let delay = getDelay();
+        let n = bars.length;
+        if (n === 0) return;
+
+        // 1. Find the maximum value in the array
+        let max = 0;
+        for (let i = 0; i < n; i++) {
+            let h = parseInt(bars[i].style.height);
+            if (h > max) max = h;
+            
+            bars[i].style.backgroundColor = '#f1c40f'; // Yellow sweep
+            playNote(h);
+            await sleep(delay);
+            bars[i].style.backgroundColor = '#3498db';
+        }
+
+        // 2. Count the occurrences of each height
+        let count = new Array(max + 1).fill(0);
+        for (let i = 0; i < n; i++) {
+            let h = parseInt(bars[i].style.height);
+            count[h]++;
+            
+            bars[i].style.backgroundColor = '#e74c3c'; // Red counting
+            playNote(h);
+            await sleep(delay);
+            bars[i].style.backgroundColor = '#3498db';
+        }
+
+        // 3. Reconstruct the sorted array visually
+        let index = 0;
+        for (let i = 0; i <= max; i++) {
+            while (count[i] > 0) {
+                bars[index].style.height = `${i}px`;
+                bars[index].style.backgroundColor = '#2ecc71'; // Green placement
+                playNote(i);
+                await sleep(delay);
+                index++;
+                count[i]--;
+            }
+        }
+    }
+
+    // --- Radix Sort ---
+    async function countingSortForRadix(bars, n, exp) {
+        let delay = getDelay();
+        let output = new Array(n);
+        let count = new Array(10).fill(0);
+
+        for (let i = 0; i < n; i++) {
+            let h = parseInt(bars[i].style.height);
+            let digit = Math.floor(h / exp) % 10;
+            count[digit]++;
+            
+            bars[i].style.backgroundColor = '#f1c40f'; // Yellow sweep
+            playNote(h);
+            await sleep(delay);
+            bars[i].style.backgroundColor = '#3498db';
+        }
+
+        for (let i = 1; i < 10; i++) {
+            count[i] += count[i - 1];
+        }
+
+        for (let i = n - 1; i >= 0; i--) {
+            let h = parseInt(bars[i].style.height);
+            let digit = Math.floor(h / exp) % 10;
+            output[count[digit] - 1] = h;
+            count[digit]--;
+        }
+
+        // Visually update the DOM for this digit's pass
+        for (let i = 0; i < n; i++) {
+            bars[i].style.height = `${output[i]}px`;
+            bars[i].style.backgroundColor = '#e67e22'; // Orange transition
+            playNote(output[i]);
+            await sleep(delay);
+            bars[i].style.backgroundColor = '#3498db';
+        }
+    }
+
+    async function radixSort() {
+        const bars = document.querySelectorAll('.bar');
+        let n = bars.length;
+        let delay = getDelay();
+        if (n === 0) return;
+
+        let max = 0;
+        for (let i = 0; i < n; i++) {
+            let h = parseInt(bars[i].style.height);
+            if (h > max) max = h;
+        }
+
+        // Process each digit (1s, 10s, 100s...)
+        for (let exp = 1; Math.floor(max / exp) > 0; exp *= 10) {
+            await countingSortForRadix(bars, n, exp);
+        }
+
+        // Final green sweep
+        for (let i = 0; i < n; i++) {
+            bars[i].style.backgroundColor = '#2ecc71';
+            playNote(parseInt(bars[i].style.height));
+            await sleep(10);
+        }
+    }
+
+    // --- Bucket Sort ---
+    async function bucketSort() {
+        const bars = document.querySelectorAll('.bar');
+        let n = bars.length;
+        let delay = getDelay();
+        if (n === 0) return;
+
+        let max = 0, min = Infinity;
+        for (let i = 0; i < n; i++) {
+            let h = parseInt(bars[i].style.height);
+            if (h > max) max = h;
+            if (h < min) min = h;
+        }
+
+        let bucketCount = Math.floor(Math.sqrt(n));
+        let buckets = Array.from({length: bucketCount}, () => []);
+
+        // Distribute elements into buckets
+        for (let i = 0; i < n; i++) {
+            let h = parseInt(bars[i].style.height);
+            let bucketIndex = Math.floor((h - min) / ((max - min + 1) / bucketCount));
+            
+            // Safety cap to prevent array out of bounds
+            if(bucketIndex >= bucketCount) bucketIndex = bucketCount - 1; 
+            
+            buckets[bucketIndex].push(h);
+            
+            bars[i].style.backgroundColor = '#e74c3c'; // Red distribution
+            playNote(h);
+            await sleep(delay);
+            bars[i].style.backgroundColor = '#3498db';
+        }
+
+        // Sort buckets and place back on the screen
+        let index = 0;
+        for (let i = 0; i < bucketCount; i++) {
+            buckets[i].sort((a, b) => a - b);
+            
+            for (let j = 0; j < buckets[i].length; j++) {
+                bars[index].style.height = `${buckets[i][j]}px`;
+                bars[index].style.backgroundColor = '#2ecc71'; // Green placement
+                playNote(buckets[i][j]);
+                await sleep(delay);
+                index++;
+            }
+        }
+    }
+
 
     // --- Searching Algorithms ---
     async function linearSearch() {
@@ -481,6 +751,175 @@ document.addEventListener("DOMContentLoaded", () => {
         alert("Target not found in the array!");
     }
 
+    async function jumpSearch() {
+        const bars = document.querySelectorAll('.bar');
+        let delay = getDelay();
+        let targetVal = document.getElementById('search-target').value;
+        let target = targetVal ? parseInt(targetVal) : -1;
+        let n = bars.length;
+
+        let heights = Array.from(bars).map(bar => parseInt(bar.style.height));
+        heights.sort((a, b) => a - b);
+        for(let i = 0; i < n; i++) {
+            bars[i].style.height = `${heights[i]}px`;
+            bars[i].style.backgroundColor = '#3498db'; 
+        }
+        await sleep(delay); 
+
+        let step = Math.floor(Math.sqrt(n));
+        let prev = 0;
+
+        while (parseInt(bars[Math.min(step, n) - 1].style.height) < target) {
+            for(let k = prev; k < Math.min(step, n); k++) {
+                bars[k].style.backgroundColor = '#f1c40f'; 
+            }
+            playNote(parseInt(bars[Math.min(step, n) - 1].style.height));
+            await sleep(delay * 2);
+
+            for(let k = prev; k < Math.min(step, n); k++) {
+                bars[k].style.backgroundColor = '#e74c3c'; 
+            }
+
+            prev = step;
+            step += Math.floor(Math.sqrt(n));
+            if (prev >= n) {
+                alert("Target not found in the array!");
+                return;
+            }
+        }
+
+        while (parseInt(bars[prev].style.height) < target) {
+            bars[prev].style.backgroundColor = '#e67e22'; 
+            playNote(parseInt(bars[prev].style.height));
+            await sleep(delay);
+            prev++;
+            if (prev === Math.min(step, n)) {
+                alert("Target not found in the array!");
+                return;
+            }
+        }
+
+        if (parseInt(bars[prev].style.height) === target) {
+            bars[prev].style.backgroundColor = '#2ecc71';
+            playNote(target);
+            return;
+        }
+        alert("Target not found in the array!");
+    }
+
+    async function interpolationSearch() {
+        const bars = document.querySelectorAll('.bar');
+        let delay = getDelay();
+        let targetVal = document.getElementById('search-target').value;
+        let target = targetVal ? parseInt(targetVal) : -1;
+        let n = bars.length;
+
+        let heights = Array.from(bars).map(bar => parseInt(bar.style.height));
+        heights.sort((a, b) => a - b);
+        for(let i = 0; i < n; i++) {
+            bars[i].style.height = `${heights[i]}px`;
+            bars[i].style.backgroundColor = '#3498db'; 
+        }
+        await sleep(delay); 
+
+        let lo = 0, hi = (n - 1);
+
+        while (lo <= hi && target >= parseInt(bars[lo].style.height) && target <= parseInt(bars[hi].style.height)) {
+            if (lo === hi) {
+                if (parseInt(bars[lo].style.height) === target) {
+                    bars[lo].style.backgroundColor = '#2ecc71';
+                    playNote(target);
+                    return;
+                }
+                alert("Target not found in the array!");
+                return;
+            }
+
+            let loHeight = parseInt(bars[lo].style.height);
+            let hiHeight = parseInt(bars[hi].style.height);
+            let pos = lo + Math.floor(((hi - lo) / (hiHeight - loHeight)) * (target - loHeight));
+            
+            bars[pos].style.backgroundColor = '#f1c40f'; 
+            playNote(parseInt(bars[pos].style.height));
+            await sleep(delay * 3);
+
+            if (parseInt(bars[pos].style.height) === target) {
+                bars[pos].style.backgroundColor = '#2ecc71';
+                return;
+            }
+
+            if (parseInt(bars[pos].style.height) < target) {
+                for(let i = lo; i <= pos; i++) bars[i].style.backgroundColor = '#e74c3c';
+                lo = pos + 1;
+            } else {
+                for(let i = pos; i <= hi; i++) bars[i].style.backgroundColor = '#e74c3c';
+                hi = pos - 1;
+            }
+        }
+        alert("Target not found in the array!");
+    }
+
+    async function exponentialSearch() {
+        const bars = document.querySelectorAll('.bar');
+        let delay = getDelay();
+        let targetVal = document.getElementById('search-target').value;
+        let target = targetVal ? parseInt(targetVal) : -1;
+        let n = bars.length;
+
+        let heights = Array.from(bars).map(bar => parseInt(bar.style.height));
+        heights.sort((a, b) => a - b);
+        for(let i = 0; i < n; i++) {
+            bars[i].style.height = `${heights[i]}px`;
+            bars[i].style.backgroundColor = '#3498db'; 
+        }
+        await sleep(delay); 
+
+        if (parseInt(bars[0].style.height) === target) {
+            bars[0].style.backgroundColor = '#2ecc71';
+            playNote(target);
+            return;
+        }
+
+        let i = 1;
+        while (i < n && parseInt(bars[i].style.height) <= target) {
+            bars[i].style.backgroundColor = '#f1c40f'; 
+            playNote(parseInt(bars[i].style.height));
+            await sleep(delay * 2);
+            bars[i].style.backgroundColor = '#3498db'; 
+            i = i * 2;
+        }
+
+        let left = Math.floor(i / 2);
+        let right = Math.min(i, n - 1);
+
+        while (left <= right) {
+            let mid = Math.floor((left + right) / 2);
+            bars[left].style.backgroundColor = '#9b59b6'; 
+            bars[right].style.backgroundColor = '#9b59b6'; 
+            bars[mid].style.backgroundColor = '#e67e22'; 
+            
+            let midHeight = parseInt(bars[mid].style.height);
+            playNote(midHeight);
+            await sleep(delay * 2); 
+
+            if (midHeight === target) {
+                bars[mid].style.backgroundColor = '#2ecc71'; 
+                if(left !== mid) bars[left].style.backgroundColor = '#3498db';
+                if(right !== mid) bars[right].style.backgroundColor = '#3498db';
+                return;
+            }
+
+            if (midHeight < target) {
+                for(let k = left; k <= mid; k++) bars[k].style.backgroundColor = '#e74c3c';
+                left = mid + 1;
+            } else {
+                for(let k = mid; k <= right; k++) bars[k].style.backgroundColor = '#e74c3c';
+                right = mid - 1;
+            }
+        }
+        alert("Target not found in the array!");
+    }
+
 
     // --- Action Button Event Listeners ---
     sortBtn.addEventListener('click', async () => {
@@ -503,6 +942,16 @@ document.addEventListener("DOMContentLoaded", () => {
             await quickSort();
         } else if (selectedAlgo === 'merge') { 
             await mergeSort();
+        } else if (selectedAlgo === 'heap') { 
+            await heapSort();
+        } else if (selectedAlgo === 'shell') { 
+            await shellSort();
+        } else if (selectedAlgo === 'counting') { // NEW
+            await countingSort();
+        } else if (selectedAlgo === 'radix') { // NEW
+            await radixSort();
+        } else if (selectedAlgo === 'bucket') { // NEW
+            await bucketSort();
         }
 
         toggleUI(false);
@@ -525,6 +974,12 @@ document.addEventListener("DOMContentLoaded", () => {
             await linearSearch();
         } else if (selectedSearch === 'binary') {
             await binarySearch();
+        } else if (selectedSearch === 'jump') { 
+            await jumpSearch();
+        } else if (selectedSearch === 'interpolation') {
+            await interpolationSearch();
+        } else if (selectedSearch === 'exponential') { 
+            await exponentialSearch();
         }
 
         toggleUI(false);
