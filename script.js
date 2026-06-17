@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // 1. Grab all UI Elements
     const sortSelect = document.getElementById("sorting-algorithm");
     const searchSelect = document.getElementById("search-algorithm");
     const allTheorySections = document.querySelectorAll('div[class$="-sort"], div[class$="-search"]');
@@ -12,7 +11,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const customArrayInput = document.getElementById('custom-array-input');
     const loadCustomBtn = document.getElementById('load-custom-btn');
     
-    // Media Player & Analytics Elements
     const pauseBtn = document.getElementById('pause-btn');
     const prevStepBtn = document.getElementById('prev-step-btn');
     const stepNextBtn = document.getElementById('step-next-btn');
@@ -24,7 +22,6 @@ document.addEventListener("DOMContentLoaded", () => {
     let array = [];
     let audioCtx = null;
 
-    // --- Snapshot Architecture Variables ---
     let frames = [];
     let currentFrame = 0;
     let isPlaying = false;
@@ -33,7 +30,6 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentComparisons = 0;
     let currentSwaps = 0;
 
-    // --- Audio Engine ---
     function initAudio() {
         if (!audioCtx) {
             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -61,7 +57,6 @@ document.addEventListener("DOMContentLoaded", () => {
         oscillator.stop(audioCtx.currentTime + 0.1); 
     }
 
-    // --- Theory Display Engine ---
     function hideAllSections() {
         allTheorySections.forEach(section => section.style.display = "none");
     }
@@ -88,18 +83,21 @@ document.addEventListener("DOMContentLoaded", () => {
     searchSelect.value = "";     
     showTheory("bubble", "sort");
 
-    // --- Array Generation Engine ---
     function renderArrayToDOM() {
+        
         visualizationContainer.innerHTML = ''; 
         for (let i = 0; i < array.length; i++) {
             const bar = document.createElement('div');
             bar.classList.add('bar');
             bar.style.height = `${array[i]}px`;
             bar.style.backgroundColor = '#3498db'; 
+            const label = document.createElement('span');
+            label.classList.add('bar-label');
+            label.innerText = array[i];
+            bar.appendChild(label);
             visualizationContainer.appendChild(bar);
         }
         
-        // Safety Check: Only update analytics if the HTML elements exist
         currentComparisons = 0;
         currentSwaps = 0;
         if(comparisonCountEl) comparisonCountEl.innerText = "0";
@@ -149,7 +147,6 @@ document.addEventListener("DOMContentLoaded", () => {
     generateArrayBtn.addEventListener('click', generateArray);
     sizeSlider.addEventListener('input', generateArray);
     
-    // Initialize first array on load
     generateArray(); 
 
     function getDelay() {
@@ -173,7 +170,6 @@ document.addEventListener("DOMContentLoaded", () => {
         targetInput.disabled = disabled;
     }
 
-    // --- The Snapshot Recorder ---
     function captureFrame() {
         const bars = document.querySelectorAll('.bar');
         let snapshot = [];
@@ -193,20 +189,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     async function sleep() {
-        captureFrame(); // Instantly records the state
+        captureFrame();
     }
 
-    // --- The Media Player Engine ---
     function renderFrame(index) {
         if(index < 0 || index >= frames.length) return;
         const frame = frames[index];
         const bars = document.querySelectorAll('.bar');
         
-        // Safety lock so out-of-bounds snapshots don't crash the UI
         const safeLength = Math.min(bars.length, frame.bars.length);
         for(let i = 0; i < safeLength; i++) {
             bars[i].style.height = frame.bars[i].height;
             bars[i].style.backgroundColor = frame.bars[i].color;
+            bars[i].innerHTML = `<span class="bar-label">${parseInt(frame.bars[i].height)}</span>`;
         }
         
         if(comparisonCountEl) comparisonCountEl.innerText = frame.comparisons;
@@ -247,7 +242,6 @@ document.addEventListener("DOMContentLoaded", () => {
         toggleUI(false); 
     }
 
-    // --- Player Button Listeners ---
     playBtn.addEventListener('click', () => {
         initAudio();
         if(frames.length > 0 && currentFrame < frames.length - 1) playAnimation();
@@ -276,7 +270,6 @@ document.addEventListener("DOMContentLoaded", () => {
     stopBtn.addEventListener('click', () => stopAnimation());
 
 
-    // --- Sorting Algorithms ---
     async function bubbleSort() {
         const bars = document.querySelectorAll('.bar');
         for (let i = 0; i < bars.length - 1; i++) {
@@ -669,7 +662,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // --- Searching Algorithms ---
     async function linearSearch() {
         const bars = document.querySelectorAll('.bar');
         let targetVal = document.getElementById('search-target').value;
@@ -898,7 +890,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // --- Core Action Button Hooks ---
     sortBtn.addEventListener('click', async () => {
         initAudio(); 
         const selectedAlgo = sortSelect.value;

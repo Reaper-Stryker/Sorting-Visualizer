@@ -13,32 +13,36 @@
 <body>
     <nav class="navbar">
         <div class="header">
-            <h1>Sorting<br>Visualizer</h1>
+            <h1>Sorting Visualizer</h1>
         </div>
         
-        <div class="nav-controls">
-            <select id="sorting-algorithm">
-                <option value="" disabled selected hidden>Select Sorting Algo...</option>
-                <option value="bubble">Bubble Sort</option>
-                <option value="selection">Selection Sort</option>
-                <option value="insertion">Insertion Sort</option>
-                <option value="merge">Merge Sort</option>
-                <option value="quick">Quick Sort</option>
-                <option value="heap">Heap Sort</option>
-                <option value="radix">Radix Sort</option>
-                <option value="counting">Counting Sort</option>
-                <option value="shell">Shell Sort</option>
-                <option value="bucket">Bucket Sort</option>
-            </select>
+        <div class="nav-controls" style="flex-wrap: wrap; justify-content: center; gap: 10px; align-items: center;">
+            <div class="sorting-algorithms-dropdown">
+                <select name="Sorting Algorithms" id="sorting-algorithm">
+                    <option value="" disabled selected hidden>Select Sorting Algo...</option>
+                    <option value="bubble">Bubble Sort</option>
+                    <option value="selection">Selection Sort</option>
+                    <option value="insertion">Insertion Sort</option>
+                    <option value="merge">Merge Sort</option>
+                    <option value="quick">Quick Sort</option>
+                    <option value="heap">Heap Sort</option>
+                    <option value="radix">Radix Sort</option>
+                    <option value="counting">Counting Sort</option>
+                    <option value="shell">Shell Sort</option>
+                    <option value="bucket">Bucket Sort</option>
+                </select>
+            </div>
             
-            <select id="search-algorithm">
-                <option value="" disabled selected hidden>Select Searching Algo...</option>
-                <option value="linear">Linear Search</option>
-                <option value="binary">Binary Search</option>
-                <option value="jump">Jump Search</option>
-                <option value="interpolation">Interpolation Search</option>
-                <option value="exponential">Exponential Search</option>
-            </select>
+            <div class="searching-algorithms-dropdown">
+                <select name="Search Algorithms" id="search-algorithm">
+                    <option value="" disabled selected hidden>Select Searching Algo...</option>
+                    <option value="linear">Linear Search</option>
+                    <option value="binary">Binary Search</option>
+                    <option value="jump">Jump Search</option>
+                    <option value="interpolation">Interpolation Search</option>
+                    <option value="exponential">Exponential Search</option>
+                </select>
+            </div>
 
             <select id="speed-select">
                 <option value="slow">Slow</option>
@@ -46,32 +50,32 @@
                 <option value="fast">Fast</option>
             </select>
 
-            <input type="number" id="search-target" placeholder="Target" style="width: 70px;">
-            <button id="search-btn" class="btn" style="background-color: #9b59b6; color: white;">Search!</button>
+            <input type="number" id="search-target" placeholder="Target" style="width: 70px; padding: 8px; border-radius: 4px; border: none;">
+            <button id="search-btn" class="btn" style="background-color: #9b59b6; color: white;" title="Run Search Algorithm">Search!</button>
 
-            <input type="text" id="custom-array-input" placeholder="e.g. 50, 120, 200" style="width: 130px;">
+            <input type="text" id="custom-array-input" placeholder="e.g. 50, 120, 200" style="width: 140px; padding: 8px; border-radius: 4px; border: none;">
             <button id="load-custom-btn" class="btn" style="background-color: #e67e22; color: white;">Load Custom</button>
 
-            <div style="display: flex; flex-direction: column; align-items: center; margin: 0 10px; color: white;">
-                <label for="size-slider" style="font-size: 11px; margin-bottom: 2px;">Size</label>
+            <div style="display: flex; flex-direction: column; align-items: center; margin: 0 10px;">
+                <label for="size-slider" style="font-size: 12px; margin-bottom: 2px;">Size</label>
                 <input type="range" id="size-slider" min="5" max="100" value="30">
             </div>
 
-            <button id="generate-array" class="btn" style="background-color: #f1c40f; color: black;">Random Array</button>
-            <button id="sort-btn" class="btn" style="background-color: #2ecc71; color: white;">Sort!</button>
+            <button id="generate-array" class="btn" style="background-color: #f1c40f; color: black;" title="Generate new randomized array">Random Array</button>
+            <button id="sort-btn" class="btn" style="background-color: #2ecc71; color: white;" title="Run Sorting Algorithm">Sort!</button>
             
-            <button id="prev-step-btn" class="btn" style="background-color: #3498db; color: white;">Prev</button>
-            <button id="step-next-btn" class="btn" style="background-color: #3498db; color: white;">Next</button>
-            <button id="pause-btn" class="btn" style="background-color: #f1c40f; color: black;">Pause</button>
-            
-            <div style="display: flex; gap: 10px; margin-left: auto;">
-                <button id="play-btn" class="btn" style="background-color: #2ecc71; color: white;">Automate</button>
-                <button id="stop-btn" class="btn" style="background-color: #e74c3c; color: white;">Stop</button>
+            <div style="display: flex; gap: 8px; border: 1px solid #4a5c6e; padding: 6px 12px; border-radius: 6px; background-color: #2c3e50; align-items: center;">
+                <span style="color: #aeb6bf; font-size: 11px; font-weight: bold; margin-right: 5px; text-transform: uppercase; letter-spacing: 1px;">Playback</span>
+                <button id="prev-step-btn" class="btn" style="background-color: #3498db; color: white;" title="Step backwards">⏮ Prev</button>
+                <button id="step-next-btn" class="btn" style="background-color: #3498db; color: white;" title="Step forwards">Next ⏭</button>
+                <button id="pause-btn" class="btn" style="background-color: #f1c40f; color: black;" title="Pause animation">⏸ Pause</button>
+                <button id="play-btn" class="btn" style="background-color: #2ecc71; color: white;" title="Play animation">▶ Automate</button>
+                <button id="stop-btn" class="btn" style="background-color: #e74c3c; color: white;" title="Stop and reset">⏹ Stop</button>
             </div>
         </div>
     </nav>
 
-    <div class="analytics-dashboard">
+    <div class="analytics-dashboard" style="display: flex; justify-content: center; gap: 40px; padding: 15px; background-color: #2c3e50; color: white; font-family: monospace; font-size: 18px; border-radius: 4px; margin: 10px 20px;">
         <div>Comparisons: <span id="comparison-count" style="color: #f1c40f; font-weight: bold;">0</span></div>
         <div>Swaps / Writes: <span id="swap-count" style="color: #2ecc71; font-weight: bold;">0</span></div>
     </div>
@@ -86,7 +90,7 @@
             <h2>Theory</h2>
         </div>
         
-        <div class="bubble-sort">
+        <div class="theory-box bubble-sort">
             <p>Bubble Sort is one of the simplest sorting algorithms. It repeatedly compares adjacent elements in a list and swaps them if they are in the wrong order. This process continues until the list is sorted.</p>
             <ul>
                 <li>Start at the beginning of the list.</li>
@@ -95,10 +99,10 @@
                 <li>Continue this for all elements in the list. After one pass, the largest element "bubbles up" to its correct position at the end of the list.</li>
                 <li>Repeat the above steps for the remaining unsorted portion of the list until no swaps are needed.</li>
             </ul>
-            <div class="complexity-box"><strong>Time Complexity:</strong> O(n<sup>2</sup>) | <strong>Space Complexity:</strong> O(1)</div>
+            <p><strong>Time Complexity:</strong> O(n<sup>2</sup>) | <strong>Space Complexity:</strong> O(1)</p>
         </div>
         
-        <div class="selection-sort">
+        <div class="theory-box selection-sort">
             <p>Selection Sort is a simple comparison-based algorithm. It divides the input list into two parts: a sorted sublist built up from left to right, and an unsorted sublist occupying the rest of the list.</p>
             <ul>
                 <li>Start with the entire list considered as unsorted.</li>
@@ -107,10 +111,10 @@
                 <li>The sorted boundary now moves one element to the right.</li>
                 <li>Repeat the scanning and swapping process for the remaining unsorted portion until the entire list is sorted.</li>
             </ul>
-            <div class="complexity-box"><strong>Time Complexity:</strong> O(n<sup>2</sup>) | <strong>Space Complexity:</strong> O(1)</div>
+            <p><strong>Time Complexity:</strong> O(n<sup>2</sup>) | <strong>Space Complexity:</strong> O(1)</p>
         </div>
         
-        <div class="insertion-sort">
+        <div class="theory-box insertion-sort">
             <p>Insertion Sort builds the final sorted array one item at a time. It behaves similarly to how a person might sort a hand of playing cards.</p>
             <ul>
                 <li>Assume the first element is already sorted.</li>
@@ -119,10 +123,10 @@
                 <li>Insert the picked element into its newly vacated, correct position.</li>
                 <li>Repeat this process until all elements have been inserted into their correct sorted places.</li>
             </ul>
-            <div class="complexity-box"><strong>Time Complexity:</strong> O(n<sup>2</sup>) | <strong>Space Complexity:</strong> O(1)</div>
+            <p><strong>Time Complexity:</strong> O(n<sup>2</sup>) | <strong>Space Complexity:</strong> O(1)</p>
         </div>
         
-        <div class="merge-sort">
+        <div class="theory-box merge-sort">
             <p>Merge Sort is an efficient, general-purpose sorting algorithm based on the divide-and-conquer strategy.</p>
             <ul>
                 <li>Divide the unsorted list exactly in half to create two sub-lists.</li>
@@ -130,10 +134,10 @@
                 <li>Begin merging the sub-lists back together by comparing the first elements of two lists and taking the smaller one.</li>
                 <li>Continue merging and ordering these sub-lists until only one sorted list remains, which is the final output.</li>
             </ul>
-            <div class="complexity-box"><strong>Time Complexity:</strong> O(n log n) | <strong>Space Complexity:</strong> O(n)</div>
+            <p><strong>Time Complexity:</strong> O(n log n) | <strong>Space Complexity:</strong> O(n)</p>
         </div>
         
-        <div class="quick-sort">
+        <div class="theory-box quick-sort">
             <p>Quick Sort is a highly efficient divide-and-conquer algorithm that relies on a central pivot point to partition the array.</p>
             <ul>
                 <li>Select an element from the list to serve as the "pivot" (often the last element or a random element).</li>
@@ -141,10 +145,10 @@
                 <li>The pivot is now strictly in its final sorted position.</li>
                 <li>Recursively apply the above steps to the sub-list of elements with smaller values and the sub-list of elements with greater values.</li>
             </ul>
-            <div class="complexity-box"><strong>Time Complexity:</strong> O(n log n) | <strong>Space Complexity:</strong> O(log n)</div>
+            <p><strong>Time Complexity:</strong> O(n log n) | <strong>Space Complexity:</strong> O(log n)</p>
         </div>
         
-        <div class="heap-sort">
+        <div class="theory-box heap-sort">
             <p>Heap Sort is a comparison-based sorting technique based on a Binary Heap data structure. It is similar to Selection Sort but uses a heap to find the maximum value faster.</p>
             <ul>
                 <li>Treat the initial list as a binary tree and transform it into a "Max-Heap" structure (where the parent node is always larger than its children).</li>
@@ -153,10 +157,10 @@
                 <li>Rebuild the Max-Heap structure for the remaining elements to push the next largest number to the root.</li>
                 <li>Repeat the swapping and rebuilding process until the heap size is reduced to zero.</li>
             </ul>
-            <div class="complexity-box"><strong>Time Complexity:</strong> O(n log n) | <strong>Space Complexity:</strong> O(1)</div>
+            <p><strong>Time Complexity:</strong> O(n log n) | <strong>Space Complexity:</strong> O(1)</p>
         </div>
         
-        <div class="radix-sort">
+        <div class="theory-box radix-sort">
             <p>Radix Sort avoids direct comparison by sorting numbers digit by digit, from least significant to most significant.</p>
             <ul>
                 <li>Find the largest number in the list to determine the maximum number of digits.</li>
@@ -164,10 +168,10 @@
                 <li>Move to the next digit (the tens place) and re-sort the entire list based solely on that digit.</li>
                 <li>Repeat this process for every digit position up to the most significant digit. Once the final digit is processed, the list is completely sorted.</li>
             </ul>
-            <div class="complexity-box"><strong>Time Complexity:</strong> O(d &times; (n + k)) | <strong>Space Complexity:</strong> O(n + k)</div>
+            <p><strong>Time Complexity:</strong> O(d &times; (n + k)) | <strong>Space Complexity:</strong> O(n + k)</p>
         </div>
         
-        <div class="counting-sort">
+        <div class="theory-box counting-sort">
             <p>Counting Sort is an integer sorting algorithm that operates without comparing elements. Instead, it relies on counting the occurrences of distinct elements.</p>
             <ul>
                 <li>Find the maximum value in the input list to determine the range of the data.</li>
@@ -176,19 +180,19 @@
                 <li>Modify the count array by adding the previous counts to the current count, turning the tallies into actual positional indexes.</li>
                 <li>Iterate backwards through the initial list, placing elements into their final sorted array based on the indexes in the count array.</li>
             </ul>
-            <div class="complexity-box"><strong>Time Complexity:</strong> O(n + k) | <strong>Space Complexity:</strong> O(n + k)</div>
+            <p><strong>Time Complexity:</strong> O(n + k) | <strong>Space Complexity:</strong> O(n + k)</p>
         </div>
         
-        <div class="shell-sort">
+        <div class="theory-box shell-sort">
             <p>Shell Sort is an optimization of Insertion Sort that allows the exchange of items that are far apart. It uses a sequence of gaps to determine which elements to compare and sort.</p>
             <ul>
                 <li>Start with a large gap and sort the elements at that gap distance using a modified insertion sort.</li>
                 <li>Gradually reduce the gap and repeat the sorting process for each new gap until the gap is reduced to 1, at which point the list is fully sorted.</li>
             </ul>
-            <div class="complexity-box"><strong>Time Complexity:</strong> O(n<sup>1.5</sup>) | <strong>Space Complexity:</strong> O(1)</div>
+            <p><strong>Time Complexity:</strong> O(n<sup>1.5</sup>) | <strong>Space Complexity:</strong> O(1)</p>
         </div>
         
-        <div class="bucket-sort">
+        <div class="theory-box bucket-sort">
             <p>Bucket Sort is a distribution sort that scatters elements into several "buckets" based on their value ranges.</p>
             <ul>
                 <li>Create an array of initially empty "buckets" (sub-arrays).</li>
@@ -196,10 +200,10 @@
                 <li>Sort each non-empty bucket individually. This is usually done using Insertion Sort.</li>
                 <li>Visit the buckets in order and concatenate their sorted contents back into the original array.</li>
             </ul>
-            <div class="complexity-box"><strong>Time Complexity:</strong> O(n + k) | <strong>Space Complexity:</strong> O(n + k)</div>
+            <p><strong>Time Complexity:</strong> O(n + k) | <strong>Space Complexity:</strong> O(n + k)</p>
         </div>
         
-        <div class="linear-search">
+        <div class="theory-box linear-search">
             <p>Linear Search is the most basic searching algorithm. It sequentially checks each element in a list until a match is found or the whole list has been searched.</p>
             <ul>
                 <li>Start at the first element of the list.</li>
@@ -207,10 +211,10 @@
                 <li>If it does not match, move to the next element in the list.</li>
                 <li>Continue this process until the target is found or the end of the list is reached.</li>
             </ul>
-            <div class="complexity-box"><strong>Time Complexity:</strong> O(n) | <strong>Space Complexity:</strong> O(1)</div>
+            <p><strong>Time Complexity:</strong> O(n) | <strong>Space Complexity:</strong> O(1)</p>
         </div>
         
-        <div class="binary-search">
+        <div class="theory-box binary-search">
             <p>Binary Search is a highly efficient algorithm for finding an item from a sorted list of items. It works by repeatedly dividing in half the portion of the list that could contain the item.</p>
             <ul>
                 <li>Start by identifying the middle element of the sorted list.</li>
@@ -219,10 +223,10 @@
                 <li>If the target is larger, narrow the search to the right half.</li>
                 <li>Repeat this halving process until the target is found or the search space is empty.</li>
             </ul>
-            <div class="complexity-box"><strong>Time Complexity:</strong> O(log n) | <strong>Space Complexity:</strong> O(1)</div>
+            <p><strong>Time Complexity:</strong> O(log n) | <strong>Space Complexity:</strong> O(1)</p>
         </div>
         
-        <div class="jump-search">
+        <div class="theory-box jump-search">
             <p>Jump Search is an algorithm for sorted arrays that checks fewer elements than Linear Search by jumping ahead by fixed steps.</p>
             <ul>
                 <li>Calculate a jump step size, typically the square root of the list's length.</li>
@@ -230,10 +234,10 @@
                 <li>Once a larger element is found (or the end is reached), perform a standard Linear Search backwards within that previous block.</li>
                 <li>Repeat the linear comparison until the target is found or the block ends.</li>
             </ul>
-            <div class="complexity-box"><strong>Time Complexity:</strong> O(&radic;n) | <strong>Space Complexity:</strong> O(1)</div>
+            <p><strong>Time Complexity:</strong> O(&radic;n) | <strong>Space Complexity:</strong> O(1)</p>
         </div>
         
-        <div class="interpolation-search">
+        <div class="theory-box interpolation-search">
             <p>Interpolation Search is an improvement over Binary Search for instances where the values in a sorted array are uniformly distributed. It estimates the position of the target like a human searching a dictionary.</p>
             <ul>
                 <li>Calculate the probable position of the target based on the values at the low and high bounds of the list.</li>
@@ -242,10 +246,10 @@
                 <li>If the target is larger, calculate a new position in the upper sub-list.</li>
                 <li>Repeat until the target is found or the calculated bounds cross each other.</li>
             </ul>
-            <div class="complexity-box"><strong>Time Complexity:</strong> O(log(log n)) | <strong>Space Complexity:</strong> O(1)</div>
+            <p><strong>Time Complexity:</strong> O(log(log n)) | <strong>Space Complexity:</strong> O(1)</p>
         </div>
         
-        <div class="exponential-search">
+        <div class="theory-box exponential-search">
             <p>Exponential Search determines a range where the search key may be present, and then performs a Binary Search within that specific range.</p>
             <ul>
                 <li>Check if the first element is the target. If not, set an index pointer to 1.</li>
@@ -253,7 +257,7 @@
                 <li>Once the element at the index is greater than the target, you have found a bounded range.</li>
                 <li>Perform a standard Binary Search between the previous index and the current index to find the exact position.</li>
             </ul>
-            <div class="complexity-box"><strong>Time Complexity:</strong> O(log n) | <strong>Space Complexity:</strong> O(1)</div>
+            <p><strong>Time Complexity:</strong> O(log n) | <strong>Space Complexity:</strong> O(1)</p>
         </div>
     </div>
 
